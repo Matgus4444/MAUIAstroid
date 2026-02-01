@@ -1,0 +1,95 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:MAUIMobile.Models"
+             xmlns:vm="clr-namespace:MAUIMobile.ViewModels"
+             x:DataType="vm:MainViewModel"
+             x:Class="MAUIMobile.MainPage"
+             Title="{Binding Title}">
+
+    <Grid
+    RowDefinitions="Auto, *"
+    ColumnDefinitions="*, Auto"
+    Padding="30"
+    BackgroundColor="{StaticResource Blue}">
+
+ 
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" VerticalOptions="Center" ColumnSpacing="10">
+
+            <VerticalStackLayout Grid.Column="0" Spacing="10" VerticalOptions="Center">
+                <HorizontalStackLayout>
+                    
+            
+                <DatePicker
+            Date="{Binding SelectedDate}"
+            DateSelected="DatePicker_DateSelected"
+            HorizontalOptions="FillAndExpand"
+            BackgroundColor="White"
+            TextColor="Black"/>
+                <Button
+    Grid.Row="0"
+    Text="Invalid Key API Call"
+    Command="{Binding DemoApiErrorCommand}"
+    BackgroundColor="{StaticResource Red}"
+    TextColor="White"
+    CornerRadius="8"
+    HeightRequest="44"
+    HorizontalOptions="End"
+    VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Row="1" Spacing="4" VerticalOptions="Center">
+                    <CheckBox IsChecked="{Binding ShowHazardousOnly}" VerticalOptions="Center"/>
+                    <Label Text="Hazardous only" VerticalOptions="Center" TextColor="White"/>
+
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+  
+    
+        </Grid>
+
+  
+
+        <CollectionView
+        Grid.Row="2"
+        Grid.ColumnSpan="2"
+        ItemsSource="{Binding Astroids}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="20"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Astroid">
+                    <Frame
+                    Padding="12"
+                    Margin="8,0"
+                    BackgroundColor="White"
+                    CornerRadius="12">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=GoToDetailCommand}"
+                            CommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="6">
+                            <Label FontSize="Title" Text="{Binding Id, StringFormat='Id: {0}'}"/>
+                            <Label FontSize="Small" Text="{Binding Name, StringFormat='Name: {0}'}"/>
+                         
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Grid BackgroundColor="#80000000" 
+            IsVisible="{Binding IsBusy}"
+          RowSpan="3"
+          ColumnSpan="2"
+          HorizontalOptions="FillAndExpand"
+          VerticalOptions="FillAndExpand">
+            <ActivityIndicator
+            IsRunning="{Binding IsBusy}"
+            Color="White"
+            WidthRequest="50"
+            HeightRequest="50"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"/>
+        </Grid>
+    </Grid>
+</ContentPage>

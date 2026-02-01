@@ -1,0 +1,52 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MAUIMobile.ViewModels"
+             x:DataType="vm:DetailsViewModel"
+             x:Class="MAUIMobile.DetailPage"
+             Title="{Binding Astroid.Name}">
+
+ 
+    <Grid BackgroundColor="{StaticResource Blue}"
+          Padding="24">
+
+ 
+        <Frame
+            BackgroundColor="White"
+            CornerRadius="16"
+            Padding="20"
+            MaximumWidthRequest="420"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+
+            <VerticalStackLayout Spacing="12">
+
+                <Label
+                    FontSize="Title"
+                    FontAttributes="Bold"
+                    Text="{Binding Astroid.Name, StringFormat='Name: {0}'}" />
+
+                <Label
+                    Text="{Binding Astroid.Id, StringFormat='ID: {0}'}"
+                    TextColor="Gray" />
+
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label
+                        Text="Is potentially dangerous"
+                        VerticalOptions="Center" />
+                    <CheckBox
+                        IsChecked="{Binding Astroid.IsPotentiallyHazardous}"
+                        IsEnabled="False"
+                        VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <Label
+                    Text="{Binding Astroid.CloseApproachDate, StringFormat='Passes earth on {0}'}" />
+
+                <Label
+                    Text="{Binding Astroid.MissDistance, StringFormat='Miss distance: {0} km'}" />
+
+            </VerticalStackLayout>
+        </Frame>
+
+    </Grid>
+</ContentPage>
