@@ -22,6 +22,14 @@ namespace MAUIMobile
                 vm.LoadAsteroidsCommand.Execute(null);
             }
         }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
 
+            if (BindingContext is MainViewModel vm)
+            {
+                _ = vm.LoadAsteroidsCommand.ExecuteAsync(null);
+            }
+        }
     }
 }
