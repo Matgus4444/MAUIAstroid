@@ -59,8 +59,7 @@ namespace MAUIMobile.ViewModels
         [RelayCommand]
         async Task DemoApiError()
         {
-            try
-            {
+           
                 // Call the API with an invalid/faulty key
                 var faultyAstroids = await astroidService.GetAstroids(SelectedDate, "Invalid_Key");
 
@@ -71,69 +70,26 @@ namespace MAUIMobile.ViewModels
             foreach (var a in faultyAstroids)
                 Astroids.Add(a);
         });
-            }
-            catch (HttpRequestException httpEx)
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    "Network Error",
-                    $"Could not reach NASA API: {httpEx.Message}",
-                    "Close");
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    "Error",
-                    $"An unexpected error occurred: {ex.Message}",
-                    "Close");
-            }
+            
+            
         }
 
         [RelayCommand]
         public async Task LoadAsteroids()
         {
-            try
-            {
-                IsBusy = true; //Show loader
-                var list = await astroidService.GetAstroids(SelectedDate);
+            IsBusy = true;
+            var list = await astroidService.GetAstroids(SelectedDate);
 
-                if (list == null || list.Count == 0)
-                {
-                    await Application.Current.MainPage.DisplayAlert(
-                        "API Error",
-                        "No asteroids found for this date.",
-                        "Close");
-                    return;
-                }
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                Astroids.Clear();
+                AllAstroids.Clear();
+                foreach (var a in list)
+                    AllAstroids.Add(a);
+                FilterAstroids();
+            });
 
-                
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    Astroids.Clear();
-                    AllAstroids.Clear();
-                    foreach (var a in list)
-                        AllAstroids.Add(a);
-
-                    FilterAstroids();
-                });
-            }
-            catch (HttpRequestException httpEx)
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    "Network Error",
-                    $"Could not reach NASA API: {httpEx.Message}",
-                    "Close");
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    "Error",
-                    $"An unexpected error occurred: {ex.Message}",
-                    "Close");
-            }
-            finally
-            {
-                IsBusy = false; // hide loader
-            }
+            IsBusy = false;
         }
         [RelayCommand]
         async void Get()
